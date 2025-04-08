@@ -1,0 +1,115 @@
+import { useEffect, useState } from "react";
+import reactLogo from "./assets/react.svg";
+import viteLogo from "/vite.svg";
+import "./App.css";
+import { parseFile } from "./service/fileParser";
+import CsvService, { CsvRow } from "./service/CsvReader";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "./store";
+import {addAllMatches, Match} from "../src/store/slice/MatchesSlice"
+import { PointElement } from "chart.js";
+import { PointsTable } from "./components/points-table/PointsTable";
+import { Schedule } from "./components/schedule/Schedule";
+export type TeamData = {
+  teamName: string;
+  runsScored: number;
+  oversTaken: number;
+  runsConceded: number;
+  oversBowled: number;
+  played: number;
+  won: number;
+  lost: number;
+  tie: number;
+  battingRr?: number;
+  bowlingRr?: number;
+  nrr: number;
+  points: number;
+};
+
+const getCricketOvers = (overs: string, wickets: string) => {
+  if (Number(wickets) == 10) {
+    return 20;
+  }
+  let balls = overs.split(".")[1] || 0;
+  let over = Number(overs.split(".")[0] || 0);
+  balls = Number(balls);
+  if (balls > 0) {
+    return Number(over) + balls / 6;
+  } else {
+    return Number(over);
+  }
+};
+function App() {
+  const [data, setData] = useState<CsvRow[]>([]);
+  const [teamDataSet, setTeamDataSet] = useState<Map<string, TeamData>>();
+  const [pointsTable,setPointsTable] = useState([]);
+  let teamData: Map<string, TeamData> = new Map();
+  let matches:Match[] = [];
+  const dispatch = useDispatch<AppDispatch>();
+  useEffect(() => {
+    CsvService.readCsv()
+      .then((data) => {
+        setData(data);
+
+        data.forEach((matchData,index) => {
+          matches.push({
+            id: index,
+            date: matchData['date'],
+            team1: matchData['team1'],
+            team2: matchData['team2'],
+            team1_overs: getCricketOvers(
+              matchData["team1_overs"],
+              matchData["team1_wickets"]
+            ),
+            team1_runs: Number(matchData['team1_runs']),
+            team1_wickets: Number(matchData['team1_wickets']),
+            team2_overs: getCricketOvers(
+              matchData["team2_overs"],
+              matchData["team2_wickets"]
+            ),
+            team2_runs: Number(matchData['team2_runs']),
+            team2_wickets: Number(matchData['team2_wickets']),
+            editable: matchData['editable'] === 'Y',
+            winner: matchData['winner']
+          });
+        });
+
+        dispatch(addAllMatches(matches));
+      })
+      .catch((error) => console.error("Error reading CSV:", error));
+  }, []);
+
+  return (
+    <div className="match-screen">
+      <Schedule />
+      <PointsTable />
+    </div>
+  //   <div className="container mx-auto p-4">
+  //   <h2 className="text-2xl font-bold mb-4">IPL 2025 Standings</h2>
+    
+  //   <table className="min-w-full bg-white border">
+  //     <thead>
+  //       <tr className="bg-gray-100">
+  //         <th className="py-2 px-4 border">Position</th>
+  //         <th className="py-2 px-4 border">Team</th>
+  //         <th className="py-2 px-4 border">Points</th>
+  //         <th className="py-2 px-4 border">NRR</th>
+  //       </tr>
+  //     </thead>
+  //     <tbody>
+  //       {pointsTable.map((t,index)=>(
+  //        <tr key={index} className="hover:bg-gray-50">
+  //        <td className="py-2 px-4 border">{index + 1}</td>
+  //        <td className="py-2 px-4 border font-medium">{t[1]['teamName']}</td>
+  //        <td className="py-2 px-4 border">{t[1]['points']}</td>
+  //        <td className="py-2 px-4 border">{t[1]['nrr']}</td>
+  //      </tr>
+  //       ))}
+  //     </tbody>
+  //   </table>
+  //   <PointsTable />
+  // </div>
+  );
+}
+
+export default App;
