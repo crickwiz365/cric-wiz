@@ -143,7 +143,7 @@ export const PointsTable: React.FC = () => {
   }, [allMatches, teamsData]);
   return (
     <div className="container mx-auto p-4">
-      <h2 className="text-2xl font-bold mb-4">IPL 2025 Standings</h2>
+      <h2 className="text-2xl font-bold mb-4">IPL 2025 Table</h2>
 
       <table className="min-w-full bg-white border">
         <thead>
