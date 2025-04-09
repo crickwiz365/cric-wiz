@@ -1,13 +1,9 @@
-import { useEffect, useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+import { useEffect } from "react";
 import "./App.css";
-import { parseFile } from "./service/fileParser";
-import CsvService, { CsvRow } from "./service/CsvReader";
+import CsvService from "./service/CsvReader";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "./store";
 import {addAllMatches, Match} from "../src/store/slice/MatchesSlice"
-import { PointElement } from "chart.js";
 import { PointsTable } from "./components/points-table/PointsTable";
 import { Schedule } from "./components/schedule/Schedule";
 export type TeamData = {
@@ -40,16 +36,11 @@ const getCricketOvers = (overs: string, wickets: string) => {
   }
 };
 function App() {
-  const [data, setData] = useState<CsvRow[]>([]);
-  const [teamDataSet, setTeamDataSet] = useState<Map<string, TeamData>>();
-  const [pointsTable,setPointsTable] = useState([]);
-  let teamData: Map<string, TeamData> = new Map();
   let matches:Match[] = [];
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
     CsvService.readCsv()
       .then((data) => {
-        setData(data);
 
         data.forEach((matchData,index) => {
           matches.push({
