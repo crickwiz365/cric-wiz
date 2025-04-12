@@ -44,3 +44,10 @@
 .match-screen {
   display: flex;
 }
+.schedule {
+  width: 100%;
+}
+
+.points{
+  width: 30%;
+}

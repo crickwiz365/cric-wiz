@@ -8,9 +8,11 @@ export interface Match {
   team1_runs: number;
   team1_wickets: number;
   team1_overs: number;
+  team1_overs_string: string;
   team2_runs: number;
   team2_wickets: number;
   team2_overs: number;
+  team2_overs_string: string;
   winner: string;
   date: string;
   editable: boolean;

@@ -1,0 +1,11 @@
+.match-card {
+    margin: 0 0 1rem 0;
+    cursor: pointer;
+    .team-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+        width: 100%;
+    }
+}

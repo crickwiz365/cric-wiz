@@ -3,7 +3,7 @@ import "./App.css";
 import CsvService from "./service/CsvReader";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "./store";
-import {addAllMatches, Match} from "../src/store/slice/MatchesSlice"
+import { addAllMatches, Match } from "../src/store/slice/MatchesSlice";
 import { PointsTable } from "./components/points-table/PointsTable";
 import { Schedule } from "./components/schedule/Schedule";
 export type TeamData = {
@@ -36,32 +36,33 @@ const getCricketOvers = (overs: string, wickets: string) => {
   }
 };
 function App() {
-  let matches:Match[] = [];
+  let matches: Match[] = [];
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
     CsvService.readCsv()
       .then((data) => {
-
-        data.forEach((matchData,index) => {
+        data.forEach((matchData, index) => {
           matches.push({
             id: index,
-            date: matchData['date'],
-            team1: matchData['team1'],
-            team2: matchData['team2'],
+            date: matchData["date"],
+            team1: matchData["team1"],
+            team2: matchData["team2"],
             team1_overs: getCricketOvers(
               matchData["team1_overs"],
               matchData["team1_wickets"]
             ),
-            team1_runs: Number(matchData['team1_runs']),
-            team1_wickets: Number(matchData['team1_wickets']),
+            team1_overs_string: matchData["team1_overs"],
+            team1_runs: Number(matchData["team1_runs"]),
+            team1_wickets: Number(matchData["team1_wickets"]),
             team2_overs: getCricketOvers(
               matchData["team2_overs"],
               matchData["team2_wickets"]
             ),
-            team2_runs: Number(matchData['team2_runs']),
-            team2_wickets: Number(matchData['team2_wickets']),
-            editable: matchData['editable'] === 'Y',
-            winner: matchData['winner']
+            team2_overs_string: matchData["team2_overs"],
+            team2_runs: Number(matchData["team2_runs"]),
+            team2_wickets: Number(matchData["team2_wickets"]),
+            editable: matchData["editable"] === "Y",
+            winner: matchData["winner"],
           });
         });
 
@@ -72,34 +73,38 @@ function App() {
 
   return (
     <div className="match-screen">
-      <Schedule />
-      <PointsTable />
+      <div className="schedule">
+        <Schedule />
+      </div>
+      <div className="points">
+        <PointsTable />
+      </div>
     </div>
-  //   <div className="container mx-auto p-4">
-  //   <h2 className="text-2xl font-bold mb-4">IPL 2025 Standings</h2>
-    
-  //   <table className="min-w-full bg-white border">
-  //     <thead>
-  //       <tr className="bg-gray-100">
-  //         <th className="py-2 px-4 border">Position</th>
-  //         <th className="py-2 px-4 border">Team</th>
-  //         <th className="py-2 px-4 border">Points</th>
-  //         <th className="py-2 px-4 border">NRR</th>
-  //       </tr>
-  //     </thead>
-  //     <tbody>
-  //       {pointsTable.map((t,index)=>(
-  //        <tr key={index} className="hover:bg-gray-50">
-  //        <td className="py-2 px-4 border">{index + 1}</td>
-  //        <td className="py-2 px-4 border font-medium">{t[1]['teamName']}</td>
-  //        <td className="py-2 px-4 border">{t[1]['points']}</td>
-  //        <td className="py-2 px-4 border">{t[1]['nrr']}</td>
-  //      </tr>
-  //       ))}
-  //     </tbody>
-  //   </table>
-  //   <PointsTable />
-  // </div>
+    //   <div className="container mx-auto p-4">
+    //   <h2 className="text-2xl font-bold mb-4">IPL 2025 Standings</h2>
+
+    //   <table className="min-w-full bg-white border">
+    //     <thead>
+    //       <tr className="bg-gray-100">
+    //         <th className="py-2 px-4 border">Position</th>
+    //         <th className="py-2 px-4 border">Team</th>
+    //         <th className="py-2 px-4 border">Points</th>
+    //         <th className="py-2 px-4 border">NRR</th>
+    //       </tr>
+    //     </thead>
+    //     <tbody>
+    //       {pointsTable.map((t,index)=>(
+    //        <tr key={index} className="hover:bg-gray-50">
+    //        <td className="py-2 px-4 border">{index + 1}</td>
+    //        <td className="py-2 px-4 border font-medium">{t[1]['teamName']}</td>
+    //        <td className="py-2 px-4 border">{t[1]['points']}</td>
+    //        <td className="py-2 px-4 border">{t[1]['nrr']}</td>
+    //      </tr>
+    //       ))}
+    //     </tbody>
+    //   </table>
+    //   <PointsTable />
+    // </div>
   );
 }
 
