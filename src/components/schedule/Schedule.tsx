@@ -2,12 +2,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { Match } from "../../store/slice/MatchesSlice";
 import {
-  Card,
-  CardContent,
-  Grid,
-  Typography,
-  useTheme,
-  styled,
+  Card
 } from "@mui/material";
 import "./Schedule.css";
 
