@@ -4,6 +4,9 @@ import { RootState } from "../../store";
 import { Match } from "../../store/slice/MatchesSlice";
 import { TeamData } from "../../store/slice/TeamSlice";
 
+import Avatar from "@mui/material/Avatar";
+import './PointsTable.css';
+
 export const PointsTable: React.FC = () => {
   const allMatches: Match[] = useSelector(
     (state: RootState) => state.matches.allMatches
@@ -143,7 +146,7 @@ export const PointsTable: React.FC = () => {
   }, [allMatches, teamsData]);
   return (
     <div className="container mx-auto p-4">
-      <h2 className="text-2xl font-bold mb-4">IPL 2025 Table</h2>
+      <h2 className="text-2xl font-bold mb-4 text-white">IPL 2025 Points Table</h2>
 
       <table className="min-w-full bg-white border">
         <thead>
@@ -159,7 +162,12 @@ export const PointsTable: React.FC = () => {
             <tr key={index} className="hover:bg-gray-50">
               <td className="py-2 px-4 border">{index + 1}</td>
               <td className="py-2 px-4 border font-medium">
+                <div className="point-team-name">
+              <Avatar alt={t[1]["teamName"]} src={t[1]["teamName"] + ".png"} />
+              <div className="point-table-team-name">
                 {t[1]["teamName"]}
+                </div>
+                </div>
               </td>
               <td className="py-2 px-4 border">{t[1]["points"]}</td>
               <td className="py-2 px-4 border">{t[1]["nrr"]}</td>

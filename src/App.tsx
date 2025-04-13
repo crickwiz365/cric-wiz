@@ -80,31 +80,6 @@ function App() {
         <PointsTable />
       </div>
     </div>
-    //   <div className="container mx-auto p-4">
-    //   <h2 className="text-2xl font-bold mb-4">IPL 2025 Standings</h2>
-
-    //   <table className="min-w-full bg-white border">
-    //     <thead>
-    //       <tr className="bg-gray-100">
-    //         <th className="py-2 px-4 border">Position</th>
-    //         <th className="py-2 px-4 border">Team</th>
-    //         <th className="py-2 px-4 border">Points</th>
-    //         <th className="py-2 px-4 border">NRR</th>
-    //       </tr>
-    //     </thead>
-    //     <tbody>
-    //       {pointsTable.map((t,index)=>(
-    //        <tr key={index} className="hover:bg-gray-50">
-    //        <td className="py-2 px-4 border">{index + 1}</td>
-    //        <td className="py-2 px-4 border font-medium">{t[1]['teamName']}</td>
-    //        <td className="py-2 px-4 border">{t[1]['points']}</td>
-    //        <td className="py-2 px-4 border">{t[1]['nrr']}</td>
-    //      </tr>
-    //       ))}
-    //     </tbody>
-    //   </table>
-    //   <PointsTable />
-    // </div>
   );
 }
 
