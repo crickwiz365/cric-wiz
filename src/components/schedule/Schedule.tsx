@@ -6,6 +6,8 @@ import {
 } from "@mui/material";
 import "./Schedule.css";
 
+import Avatar from '@mui/material/Avatar';
+
 export const Schedule = () => {
   const allMatches: Match[] = useSelector(
     (state: RootState) => state.matches.allMatches
@@ -16,7 +18,9 @@ export const Schedule = () => {
         <Card className="match-card">
           <div className="team-container">
             <div>
-              <div>Logo</div>
+              <div>
+              <Avatar alt="CSK" src={match.team1+'.png'} />
+              </div>
               <div>{match.team1}</div>
             </div>
             <div>
@@ -29,7 +33,7 @@ export const Schedule = () => {
               {match.team2_overs_string})
             </div>
             <div>
-              <div>Logo</div>
+            <Avatar alt="CSK" src={match.team2+'.png'} />
               <div>{match.team2}</div>
             </div>
           </div>
