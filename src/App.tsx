@@ -80,6 +80,7 @@ function App() {
         <PointsTable />
       </div>
     </div>
+    
   );
 }
 

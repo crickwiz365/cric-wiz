@@ -1,0 +1,32 @@
+.match-card {
+    margin: 0 0 1rem 0;
+    cursor: pointer;
+    .team-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 1rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        padding-bottom: 0rem;
+        width: 100%;
+    }
+    .match-summary {
+        padding-bottom: 5px;
+        font-size: 13px;
+        font-weight: bold;
+        .match-details {
+            font-size: 10px;
+            font-weight: lighter;
+        }
+    }
+    .edit-match {
+            display: flex;
+            flex-direction: row-reverse;
+            padding: 5px;
+    }
+    .match-form {
+        padding: 5px;
+        width: 100%;
+    }
+}
