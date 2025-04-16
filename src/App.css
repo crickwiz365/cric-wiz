@@ -48,9 +48,30 @@
   width: 70%;
 }
 
+.schedule-mobile {
+  top: 30vh;
+}
+
 .points{
   width: 30%;
   position: fixed;
   top: 0;
   right: 0;
+}
+
+.points-mobile {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100%;
+  z-index: 100 !important;
+}
+
+.class1{
+  background-color: yellow;
+}
+
+.class2 {
+  background-color: lightblue;
+  display: flex;
 }

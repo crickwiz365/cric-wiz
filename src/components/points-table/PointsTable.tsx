@@ -3,11 +3,24 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { Match } from "../../store/slice/MatchesSlice";
 import { TeamData } from "../../store/slice/TeamSlice";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+} from "@mui/material";
 
 import Avatar from "@mui/material/Avatar";
-import './PointsTable.css';
+import "./PointsTable.css";
 
-export const PointsTable: React.FC = () => {
+interface PointsTableProps {
+  isMobile: boolean;
+}
+
+export const PointsTable: React.FC<PointsTableProps> = ({ isMobile }) => {
   const allMatches: Match[] = useSelector(
     (state: RootState) => state.matches.allMatches
   );
@@ -17,7 +30,6 @@ export const PointsTable: React.FC = () => {
   const [pointsTable, setPointsTable] = useState([]);
   let teamData: Map<string, TeamData> = new Map();
   useEffect(() => {
-    console.log({ AllMatches: allMatches });
     if (teamsData.length == 0) {
       console.log("API Call");
       allMatches.forEach((matchData) => {
@@ -144,37 +156,77 @@ export const PointsTable: React.FC = () => {
     });
     setPointsTable(sortedTeams);
   }, [allMatches, teamsData]);
+ 
   return (
-    <div className="container mx-auto p-4">
-      <h2 className="text-2xl font-bold mb-4 text-white">IPL 2025 Points Table</h2>
-
-      <table className="min-w-full bg-white border">
-        <thead>
-          <tr className="bg-gray-100">
-            <th className="py-2 px-4 border">Position</th>
-            <th className="py-2 px-4 border">Team</th>
-            <th className="py-2 px-4 border">Points</th>
-            <th className="py-2 px-4 border">NRR</th>
-          </tr>
-        </thead>
-        <tbody>
-          {pointsTable.map((t, index) => (
-            <tr key={index} className="hover:bg-gray-50">
-              <td className="py-2 px-4 border">{index + 1}</td>
-              <td className="py-2 px-4 border font-medium">
-                <div className="point-team-name">
-              <Avatar alt={t[1]["teamName"]} src={t[1]["teamName"] + ".png"} />
-              <div className="point-table-team-name">
-                {t[1]["teamName"]}
-                </div>
-                </div>
-              </td>
-              <td className="py-2 px-4 border">{t[1]["points"]}</td>
-              <td className="py-2 px-4 border">{t[1]["nrr"]}</td>
+    <div className="container mx-auto p-4 bg-black">
+      {!isMobile && (
+        <h2 className="text-2xl font-bold mb-4 text-white">
+          IPL 2025 Points Table
+        </h2>
+      )}
+      {!isMobile && (
+        <table className="min-w-full bg-white border">
+          <thead>
+            <tr className="bg-gray-100">
+              <th className="py-2 px-4 border">Position</th>
+              <th className="py-2 px-4 border">Team</th>
+              <th className="py-2 px-4 border">Points</th>
+              <th className="py-2 px-4 border">NRR</th>
             </tr>
+          </thead>
+          <tbody>
+            {pointsTable.map((t, index) => (
+              <tr key={index} className="hover:bg-gray-50">
+                <td className="py-2 px-4 border">{index + 1}</td>
+                <td className="py-2 px-4 border font-medium">
+                  <div className="point-team-name">
+                    <Avatar
+                      alt={t[1]["teamName"]}
+                      src={t[1]["teamName"] + ".png"}
+                    />
+                    <div className="point-table-team-name">
+                      {t[1]["teamName"]}
+                    </div>
+                  </div>
+                </td>
+                <td className="py-2 px-4 border">{t[1]["points"]}</td>
+                <td className="py-2 px-4 border">{t[1]["nrr"]}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+      {
+        isMobile && 
+        <TableContainer component={Paper}>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell sx={{ width: '30%', textAlign: 'left' }}>Team</TableCell>
+            <TableCell sx={{ width: '30%', textAlign: 'left' }}>Points</TableCell>
+            <TableCell sx={{ width: '40%', textAlign: 'left' }}>NRR</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {pointsTable.map((row,index) => (
+            <TableRow key={index}>
+              <TableCell sx={{ width: '30%', textAlign: 'left' }}><div className="point-team-name">
+                    <Avatar
+                      alt={row[1]["teamName"]}
+                      src={row[1]["teamName"] + ".png"}
+                    />
+                    <div className="point-table-team-name">
+                      {row[1]["teamName"]}
+                    </div>
+                  </div></TableCell>
+              <TableCell sx={{ width: '30%', textAlign: 'left' }}>{row[1]['points']}</TableCell>
+              <TableCell sx={{ width: '40%', textAlign: 'left' }}>{row[1]['nrr']}</TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
+    </TableContainer>
+      }
     </div>
   );
 };

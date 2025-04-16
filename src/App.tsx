@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import CsvService from "./service/CsvReader";
 import { useDispatch } from "react-redux";
@@ -6,6 +6,14 @@ import { AppDispatch } from "./store";
 import { addAllMatches, Match } from "../src/store/slice/MatchesSlice";
 import { PointsTable } from "./components/points-table/PointsTable";
 import { Schedule } from "./components/schedule/Schedule";
+
+import Accordion from "@mui/material/Accordion";
+import AccordionActions from "@mui/material/AccordionActions";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import Typography from "@mui/material/Typography";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import Button from "@mui/material/Button";
 export type TeamData = {
   teamName: string;
   runsScored: number;
@@ -70,17 +78,63 @@ function App() {
       })
       .catch((error) => console.error("Error reading CSV:", error));
   }, []);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 767px)");
+
+    const handleChange = (e: MediaQueryListEvent) => {
+      setIsMobile(e.matches);
+    };
+
+    // Set initial value
+    setIsMobile(mediaQuery.matches);
+
+    // Add listener
+    mediaQuery.addEventListener("change", handleChange);
+
+    // Cleanup
+  }, []);
+
 
   return (
-    <div className="match-screen">
-      <div className="schedule">
-        <Schedule />
-      </div>
-      <div className="points">
-        <PointsTable />
-      </div>
+    <div>
+      {!isMobile && (
+        <div className={isMobile ? "" : "match-screen"}>
+          <div className={isMobile ? "schedule-mobile" : "schedule"}>
+            <Schedule />
+          </div>
+          <div className={isMobile ? "points-mobile" : "points"}>
+            <PointsTable isMobile={isMobile} />
+          </div>
+        </div>
+      )}
+      {isMobile &&
+        <div>
+          <div className="points-mobile">
+          <Accordion >
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel3-content"
+              id="panel3-header"
+            >
+              <Typography component="span">
+                IPL 2025 Points Table {isMobile}
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <PointsTable isMobile={isMobile} />
+            </AccordionDetails>
+            <AccordionActions>
+              <Button>Cancel</Button>
+              <Button>Agree</Button>
+            </AccordionActions>
+          </Accordion>
+          </div>
+          <Schedule />
+        </div>
+      }
     </div>
-    
   );
 }
 

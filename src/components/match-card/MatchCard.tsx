@@ -109,14 +109,7 @@ export const MatchCard = forwardRef<HTMLDivElement,MatchCardProps>(({ match },re
     checkErrors(matchForm.team2_wickets,"team2_wickets");
   }, [matchForm]);
 
-  useEffect(()=>{
-    if(errorMap.size == 0) {
-        console.log({FormValid: matchForm});
-        
-    } else {
-        console.log({ErrorMap:errorMap});
-    }
-  },[errorMap])
+
 
   const getCricketOvers = (overs: string, wickets: string) => {
     if (Number(wickets) == 10) {

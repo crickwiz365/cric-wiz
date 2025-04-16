@@ -4,3 +4,15 @@
 .point-table-team-name {
     margin: 10px;
 }
+
+.table-team-name {
+    width: 1vw;
+}
+
+.table-team-points {
+    width: 1vw;
+}
+
+.table-team-nrr {
+    width: 1vw;
+}
