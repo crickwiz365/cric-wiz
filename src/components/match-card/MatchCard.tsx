@@ -4,9 +4,10 @@ import Avatar from "@mui/material/Avatar";
 import EditIcon from "@mui/icons-material/Edit";
 import { Button, Card } from "@mui/material";
 import "./MatchCard.css";
-import { useEffect, useState } from "react";
+import { forwardRef, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../store";
+import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 
 interface MatchCardProps {
   match: Match;
@@ -21,7 +22,7 @@ interface MatchFormData {
   team2_overs: string;
 }
 
-export const MatchCard: React.FC<MatchCardProps> = ({ match }) => {
+export const MatchCard = forwardRef<HTMLDivElement,MatchCardProps>(({ match },ref) => {
   const [editMatch, setEditMatch] = useState(false);
   
   const dispatch = useDispatch<AppDispatch>();
@@ -99,7 +100,6 @@ export const MatchCard: React.FC<MatchCardProps> = ({ match }) => {
       }
     }
   };
-
   useEffect(() => {
     checkErrors(matchForm.team1_runs,"team1_runs");
     checkErrors(matchForm.team2_runs,"team2_runs");
@@ -112,6 +112,7 @@ export const MatchCard: React.FC<MatchCardProps> = ({ match }) => {
   useEffect(()=>{
     if(errorMap.size == 0) {
         console.log({FormValid: matchForm});
+        
     } else {
         console.log({ErrorMap:errorMap});
     }
@@ -151,8 +152,18 @@ export const MatchCard: React.FC<MatchCardProps> = ({ match }) => {
     setEditMatch(false);
   }
 
+  const onSwapTeams = () => {
+    const newMatch:Match = {
+        ...match,
+       team1: match.team2,
+       team2: match.team1,
+       winner: ''
+    };
+    dispatch(updateMatch(newMatch));
+  }
+
   return (
-    <Card className="match-card">
+    <Card className="match-card" ref={ref}>
       <div className="team-container">
         <div>
           <div>
@@ -209,7 +220,7 @@ export const MatchCard: React.FC<MatchCardProps> = ({ match }) => {
             </div>
           </div>
         )}
-
+        {editMatch && <SwapHorizIcon onClick={()=>{onSwapTeams()}}/>}
         {(!match.editable || match.team1_overs != 0) && !editMatch && (
           <div>
             {match.team2_runs} / {match.team2_wickets} (
@@ -266,12 +277,12 @@ export const MatchCard: React.FC<MatchCardProps> = ({ match }) => {
         <div className="match-details">
           {"T20 " + Number(match.id + 1) + " of 74"}{" "}
         </div>
-        {!match.editable && match.winner === match.team1 && (
+        {(!match.editable || match.team1_overs!=0) && match.winner === match.team1 && (
           <div>
             {match.team1} won by {match.team1_runs - match.team2_runs} runs
           </div>
         )}
-        {!match.editable && match.winner === match.team2 && (
+        {(!match.editable || match.team1_overs!=0) && match.winner === match.team2 && (
           <div>
             {match.team2} won by {10 - match.team2_wickets} wickets
           </div>
@@ -293,4 +304,4 @@ export const MatchCard: React.FC<MatchCardProps> = ({ match }) => {
       </div>
     </Card>
   );
-};
+});

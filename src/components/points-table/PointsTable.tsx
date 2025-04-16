@@ -118,7 +118,7 @@ export const PointsTable: React.FC = () => {
             team1Data.points += 2;
             team1Data.won += 1;
             team2Data.lost += 1;
-          } else {
+          } else if (matchData["winner"] === matchData["team2"]) {
             team2Data.points += 2;
             team2Data.won += 1;
             team1Data.lost += 1;

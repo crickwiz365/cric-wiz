@@ -3,40 +3,40 @@ import { RootState } from "../../store";
 import { Match } from "../../store/slice/MatchesSlice";
 import "./Schedule.css";
 import { MatchCard } from "../match-card/MatchCard";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export const Schedule = () => {
   const allMatches: Match[] = useSelector(
     (state: RootState) => state.matches.allMatches
   );
-  const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
-
-  // Initialize refs array
-  useEffect(() => {
-    let index = 0;
-    itemRefs.current = allMatches.map((_, i) => {
-        if(index===0) {
-            if(_.editable) {
-                index=i;
-            }
+  let activeFlag = false;  
+  const [activeIndex,setActiveIndex] = useState(0);
+  useEffect(()=>{
+    allMatches.forEach((match,index)=>{
+        if(!activeFlag && match.editable) {
+            setActiveIndex(index);
+            activeFlag=true;
+            return;
         }
-        return itemRefs.current[i] ?? null
-    });
-    console.log({ActiveIndex:index})
-    scrollToItem(index);
-  }, [allMatches]);
+    })
+  },[allMatches]);
+  const activeCardRef = useRef<HTMLDivElement>(null);
 
-  const scrollToItem = (index: number) => {
-    console.log({Scrolling:index})
-    itemRefs.current[index]?.scrollIntoView({
-      behavior: 'smooth',
-      block: 'nearest'
-    });
-  };
+  useEffect(() => {
+    if (activeCardRef.current) {
+      activeCardRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+      });
+    }
+  }, [activeIndex]);
+
   return (
     <div>
       {allMatches.map((match) => (
-       <MatchCard match={match}/>
+       <MatchCard match={match}
+       ref={match.id === activeIndex ? activeCardRef : null}
+       />
       ))}
     </div>
   );
