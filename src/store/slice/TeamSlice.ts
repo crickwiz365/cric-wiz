@@ -14,6 +14,7 @@ export type TeamData = {
     bowlingRr?: number;
     nrr: number;
     points: number;
+    position: number;
   };
 
   export interface TeamsState {

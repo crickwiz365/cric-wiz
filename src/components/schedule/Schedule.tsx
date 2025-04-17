@@ -34,7 +34,7 @@ export const Schedule = () => {
   return (
     <div>
       {allMatches.map((match) => (
-       <MatchCard match={match}
+       <MatchCard match={match} key={match.id}
        ref={match.id === activeIndex ? activeCardRef : null}
        />
       ))}

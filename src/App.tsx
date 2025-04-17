@@ -14,21 +14,7 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Button from "@mui/material/Button";
-export type TeamData = {
-  teamName: string;
-  runsScored: number;
-  oversTaken: number;
-  runsConceded: number;
-  oversBowled: number;
-  played: number;
-  won: number;
-  lost: number;
-  tie: number;
-  battingRr?: number;
-  bowlingRr?: number;
-  nrr: number;
-  points: number;
-};
+
 
 const getCricketOvers = (overs: string, wickets: string) => {
   if (Number(wickets) == 10) {

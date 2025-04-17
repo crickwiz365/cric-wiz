@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { RootState } from "../../store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../store";
 import { Match } from "../../store/slice/MatchesSlice";
-import { TeamData } from "../../store/slice/TeamSlice";
+import { TeamData, updateTeamsData } from "../../store/slice/TeamSlice";
 import {
   Table,
   TableBody,
   TableCell,
   TableContainer,
-  TableHead,
   TableRow,
   Paper,
 } from "@mui/material";
@@ -24,6 +23,7 @@ export const PointsTable: React.FC<PointsTableProps> = ({ isMobile }) => {
   const allMatches: Match[] = useSelector(
     (state: RootState) => state.matches.allMatches
   );
+  const dispatch = useDispatch<AppDispatch>();
   const teamsData: TeamData[] = useSelector(
     (state: RootState) => state.teams.teamsData
   );
@@ -46,6 +46,7 @@ export const PointsTable: React.FC<PointsTableProps> = ({ isMobile }) => {
             tie: 0,
             nrr: 0,
             points: 0,
+            position: 0
           };
           team1Data.runsScored += matchData["team1_runs"];
           team1Data.oversTaken += matchData.team1_overs;
@@ -62,6 +63,7 @@ export const PointsTable: React.FC<PointsTableProps> = ({ isMobile }) => {
             tie: 0,
             nrr: 0,
             points: 0,
+            position: 0
           };
           team2Data.runsScored += Number(matchData["team2_runs"]);
           team2Data.oversTaken += matchData.team2_overs;
@@ -100,6 +102,7 @@ export const PointsTable: React.FC<PointsTableProps> = ({ isMobile }) => {
             tie: 0,
             nrr: 0,
             points: 0,
+            position: 0
           };
           team1Data.runsScored += matchData["team1_runs"];
           team1Data.oversTaken += matchData.team1_overs;
@@ -116,6 +119,7 @@ export const PointsTable: React.FC<PointsTableProps> = ({ isMobile }) => {
             tie: 0,
             nrr: 0,
             points: 0,
+            position: 0
           };
           team2Data.runsScored += Number(matchData["team2_runs"]);
           team2Data.oversTaken += matchData.team2_overs;
@@ -155,7 +159,29 @@ export const PointsTable: React.FC<PointsTableProps> = ({ isMobile }) => {
       return b[1].nrr - a[1].nrr;
     });
     setPointsTable(sortedTeams);
-  }, [allMatches, teamsData]);
+  }, [allMatches]);
+
+  useEffect(()=>{
+    let teams:TeamData[] = [];
+    pointsTable.forEach((team,index)=>{
+        teams.push({
+            teamName: team[1]["teamName"],
+            position: index+1,
+            nrr: team[1]["nrr"],
+            lost: team[1]["lost"],
+            oversBowled: team[1]["oversBowled"],
+            oversTaken:team[1]["oversTaken"],
+            played: team[1]["played"],
+            points: team[1]["points"],
+            runsConceded: team[1]["runsConceded"],
+            runsScored: team[1]["runsScored"],
+            tie: team[1]["tie"],
+            won: team[1]["won"]
+        })
+    })
+    dispatch(updateTeamsData(teams));
+    
+  },[pointsTable])
  
   return (
     <div className="container mx-auto p-4 bg-black">
@@ -200,17 +226,12 @@ export const PointsTable: React.FC<PointsTableProps> = ({ isMobile }) => {
         isMobile && 
         <TableContainer component={Paper}>
       <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell sx={{ width: '30%', textAlign: 'left' }}>Team</TableCell>
-            <TableCell sx={{ width: '30%', textAlign: 'left' }}>Points</TableCell>
-            <TableCell sx={{ width: '40%', textAlign: 'left' }}>NRR</TableCell>
-          </TableRow>
-        </TableHead>
+       
         <TableBody>
           {pointsTable.map((row,index) => (
             <TableRow key={index}>
-              <TableCell sx={{ width: '30%', textAlign: 'left' }}><div className="point-team-name">
+                <TableCell sx={{ width: '10%', textAlign: 'left' }}>{index+1}</TableCell>
+              <TableCell sx={{ width: '20%', textAlign: 'left' }}><div className="point-team-name">
                     <Avatar
                       alt={row[1]["teamName"]}
                       src={row[1]["teamName"] + ".png"}
