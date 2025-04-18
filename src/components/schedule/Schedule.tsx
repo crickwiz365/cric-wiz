@@ -5,7 +5,10 @@ import "./Schedule.css";
 import { MatchCard } from "../match-card/MatchCard";
 import { useEffect, useRef, useState } from "react";
 
-export const Schedule = () => {
+interface ScheduleProps {
+    isMobile: boolean;
+}
+export const Schedule:React.FC<ScheduleProps> = ({isMobile}) => {
   const allMatches: Match[] = useSelector(
     (state: RootState) => state.matches.allMatches
   );
@@ -34,7 +37,7 @@ export const Schedule = () => {
   return (
     <div>
       {allMatches.map((match) => (
-       <MatchCard match={match} key={match.id}
+       <MatchCard match={match} key={match.id} isMobile={isMobile}
        ref={match.id === activeIndex ? activeCardRef : null}
        />
       ))}

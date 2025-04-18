@@ -8,12 +8,10 @@ import { PointsTable } from "./components/points-table/PointsTable";
 import { Schedule } from "./components/schedule/Schedule";
 
 import Accordion from "@mui/material/Accordion";
-import AccordionActions from "@mui/material/AccordionActions";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import Button from "@mui/material/Button";
 
 
 const getCricketOvers = (overs: string, wickets: string) => {
@@ -88,7 +86,7 @@ function App() {
       {!isMobile && (
         <div className={isMobile ? "" : "match-screen"}>
           <div className={isMobile ? "schedule-mobile" : "schedule"}>
-            <Schedule />
+            <Schedule isMobile={isMobile} />
           </div>
           <div className={isMobile ? "points-mobile" : "points"}>
             <PointsTable isMobile={isMobile} />
@@ -98,7 +96,10 @@ function App() {
       {isMobile &&
         <div>
           <div className="points-mobile">
-          <Accordion >
+          <Accordion sx={{
+            maxHeight: 'none',
+            overflow: 'hidden'
+          }}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel3-content"
@@ -111,13 +112,9 @@ function App() {
             <AccordionDetails>
               <PointsTable isMobile={isMobile} />
             </AccordionDetails>
-            <AccordionActions>
-              <Button>Cancel</Button>
-              <Button>Agree</Button>
-            </AccordionActions>
           </Accordion>
           </div>
-          <Schedule />
+          <Schedule isMobile={isMobile}/>
         </div>
       }
     </div>

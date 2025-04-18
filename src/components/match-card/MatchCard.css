@@ -36,3 +36,6 @@
     flex-direction: column;
     align-items: anchor-center;
 }
+.team-name-position {
+    display: flex;
+}
